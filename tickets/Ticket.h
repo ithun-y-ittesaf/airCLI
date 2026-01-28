@@ -2,7 +2,8 @@
 #define TICKETS_TICKET_H
 
 #include <string>
-#include "../utils/Types.h"
+
+using namespace std;
 
 namespace tickets {
     class Ticket {
@@ -15,12 +16,17 @@ namespace tickets {
         string destination;
         string flightDate;
     public:
-        Ticket(int id = 0, int passengerId = 0, int flightId = 0, string issuedDate = nullptr, string origin = nullptr, string destination = nullptr, string flightDate = nullptr)
+
+        Ticket() {}
+        Ticket(const string &ticketId, const string &passengerId, 
+               const string &flightId, const string &issued,
+               const string &origin, const string &destination, 
+               const string &flightDate)
         {
-            this->id = id;
+            this->id = ticketId;
             this->passengerId = passengerId;
-            this->flightDate = flightId;
-            this->issuedDate = issuedDate;
+            this->flightId = flightId;
+            this->issuedDate = issued;
             this->origin = origin;
             this->destination = destination;
             this->flightDate = flightDate;
@@ -39,4 +45,4 @@ namespace tickets {
     };
 }
 
-#endif
+#endif // TICKET_H

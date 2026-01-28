@@ -2,7 +2,6 @@
 #define FLIGHTS_FLIGHT_H
 
 #include <string>
-#include "../utils/Types.h"
 
 using namespace std;
 
@@ -16,7 +15,7 @@ namespace flights {
         int seatsBooked;
 
     public:
-        Flight(int id = 0, string origin = nullptr, string destination = nullptr, string date = nullptr, int capacity = 0, int seatsBooked = 0)
+        Flight(string id = "", string origin = "", string destination = "", string date = "", int capacity = 0, int seatsBooked = 0)
         {
         this->id = id;
         this->origin = origin;
@@ -26,32 +25,32 @@ namespace flights {
         this->seatsBooked = seatsBooked;
     }
     
-        string getId()
+        const string& getId() const
         {
             return id; 
         }
 
-        string getOrigin()
+        const string& getOrigin() const
         {
             return origin;
         }
 
-        string getDestination()
+        const string& getDestination() const
         { 
             return  destination;
         }
 
-        string getDate()
+        const string& getDate() const
         { 
             return date; 
         }
 
-        int getCapacity()  
+        int getCapacity() const  
         { 
             return capacity; 
         }
 
-        int getSeatsBooked()  
+        int getSeatsBooked() const  
         { 
             return seatsBooked; 
         }
@@ -61,8 +60,8 @@ namespace flights {
             seatsBooked = v; 
         }
 
-        string serialize() ;
-        static Flight deserialize( string &line);
+        string serialize() const;
+        static Flight deserialize(const string &line);
     };
 }
 

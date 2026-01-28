@@ -3,7 +3,8 @@
 
 #include <string>
 #include "TicketManager.h"
-#include "../utils/Types.h"
+#include "../Role.h"
+
 
 namespace flights { class FlightManager; }
 
@@ -14,9 +15,9 @@ namespace tickets {
         flights::FlightManager &flightManager;
     public:
         TicketsCLI(TicketManager &m, flights::FlightManager &fm) : manager(m), flightManager(fm) {}
-        void run(const string &currentUserId, utils::Role currentRole);
-        void runViewTickets(const string &currentUserId, utils::Role currentRole);
-        void runTravelHistory(const string &currentUserId, utils::Role currentRole);
+        void run(const string &currentUserId, Role currentRole);
+        void runViewTickets(const string &currentUserId, Role currentRole);
+        void runTravelHistory(const string &currentUserId, Role currentRole);
     };
 }
 

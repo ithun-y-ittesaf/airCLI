@@ -5,7 +5,7 @@
 #include <algorithm>
 
 namespace tickets {
-    void TicketsCLI::run(const string &currentUserId, utils::Role currentRole) {
+    void TicketsCLI::run(const string &currentUserId, Role currentRole) {
         (void)currentRole;
         manager.load();
         cout << "\n-- My Tickets --\n";
@@ -17,7 +17,7 @@ namespace tickets {
         }
     }
 
-    void TicketsCLI::runViewTickets(const string &currentUserId, utils::Role currentRole) {
+    void TicketsCLI::runViewTickets(const string &currentUserId, Role currentRole) {
         (void)currentRole;
         manager.load();
         
@@ -51,7 +51,7 @@ namespace tickets {
         cout << "Boarding Gate : Assigned at airport\n";
     }
 
-    void TicketsCLI::runTravelHistory(const string &currentUserId, utils::Role currentRole) {
+    void TicketsCLI::runTravelHistory(const string &currentUserId, Role currentRole) {
         (void)currentRole;
         manager.load();
         flightManager.load();

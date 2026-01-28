@@ -18,7 +18,7 @@ namespace flights {
         return true;
     }
 
-    bool FlightManager::save() 
+    bool FlightManager::save() const
     {
         vector<string> lines;
         for (const auto &p : flightsById) {
@@ -28,7 +28,7 @@ namespace flights {
         return storage::DataStorage::writeAll("flights.txt", lines);
     }
 
-    string FlightManager::createFlight(string orig, string dest, string date, int capacity) 
+    string FlightManager::createFlight(const string &orig, const string &dest, const string &date, int capacity) 
     {
         using namespace chrono;
         auto ts = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
@@ -54,7 +54,7 @@ namespace flights {
         return &it->second;
     }
 
-    vector<Flight> FlightManager::all()
+    vector<Flight> FlightManager::all() const
     {
         vector<Flight> v;
         v.reserve(flightsById.size());

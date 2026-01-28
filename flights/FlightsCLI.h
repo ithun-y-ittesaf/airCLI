@@ -3,8 +3,8 @@
 
 #include <string>
 #include "FlightManager.h"
+#include "../Role.h"
 #include "../tickets/TicketManager.h"
-#include "../utils/Types.h"
 
 namespace flights {
     class FlightsCLI {
@@ -13,8 +13,8 @@ namespace flights {
         tickets::TicketManager &ticketManager;
     public:
         explicit FlightsCLI(FlightManager &m, tickets::TicketManager &tm) : manager(m), ticketManager(tm) {}
-        void run(const utils::ID &currentUserId, utils::Role currentRole);
-        void runSearchAndBook(const utils::ID &currentUserId, utils::Role currentRole);
+        void run(const string &currentUserId, Role currentRole);
+        void runSearchAndBook(const string &currentUserId, Role currentRole);
     };
 }
 

@@ -2,12 +2,12 @@
 #include <sstream>
 
 namespace flights {
-    string Flight::serialize()  
+    string Flight::serialize() const  
     {
         return id + "|" + origin + "|" + destination + "|" + date + "|" + to_string(capacity) + "|" + to_string(seatsBooked);
     }
 
-    Flight Flight::deserialize( string line) 
+    Flight Flight::deserialize(const string &line) 
     {
         stringstream ss(line);
         string id, orig, dest, date, capStr, bookedStr;

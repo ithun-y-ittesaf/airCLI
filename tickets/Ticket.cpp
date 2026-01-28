@@ -1,6 +1,8 @@
 #include "Ticket.h"
 #include <sstream>
 
+using namespace std;
+
 namespace tickets {
     string Ticket::serialize() const {
         return id + "|" + passengerId + "|" + flightId + "|" + issuedDate + "|" + origin + "|" + destination + "|" + flightDate;
@@ -8,15 +10,16 @@ namespace tickets {
 
     Ticket Ticket::deserialize(const string &line) {
         stringstream ss(line);
-        string id, passId, flightId, issued, orig, dest, fDate;
+        string id, passengerId, flightId, issuedDate, origin, destination, flightDate;
+
         getline(ss, id, '|');
-        getline(ss, passId, '|');
+        getline(ss, passengerId, '|');
         getline(ss, flightId, '|');
-        getline(ss, issued, '|');
-        getline(ss, orig, '|');
-        getline(ss, dest, '|');
-        getline(ss, fDate, '|');
+        getline(ss, issuedDate, '|');
+        getline(ss, origin, '|');
+        getline(ss, destination, '|');
+        getline(ss, flightDate, '|');
         
-        return Ticket(id, passId, flightId, issued, orig, dest, fDate);
+        return Ticket(id, passengerId, flightId, issuedDate, origin, destination, flightDate);
     }
 }

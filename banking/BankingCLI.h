@@ -3,6 +3,7 @@
 
 #include <string>
 #include "BankingManager.h"
+#include "../Role.h"
 
 namespace banking {
     

@@ -4,11 +4,11 @@
 #include <iomanip>
 
 namespace flights {
-    void FlightsCLI::run(const utils::ID &currentUserId, utils::Role currentRole) {
+    void FlightsCLI::run(const string &currentUserId, Role currentRole) {
         manager.load();
         ticketManager.load();
         cout << "\n-- Flights --\n";
-        if (access::AccessControl::anyOf(currentRole, {utils::Role::Admin})) {
+        if (access::AccessControl::anyOf(currentRole, {Role::Admin})) {
             cout << "1) List Flights\n2) Create Flight\n3) Book Seat\n4) Back\nChoice: ";
         } else {
             cout << "1) List Flights\n2) Book Seat\n3) Back\nChoice: ";
@@ -22,7 +22,7 @@ namespace flights {
                           << " | " << f.getDate() << " | " << (f.getCapacity()-f.getSeatsBooked()) << " seats left\n";
             }
         } else if (ch == 2) {
-            if (access::AccessControl::anyOf(currentRole, {utils::Role::Admin})) {
+            if (access::AccessControl::anyOf(currentRole, {Role::Admin})) {
                 string o,d,date; int cap;
                 cout << "Origin: "; cin >> o;
                 cout << "Destination: "; cin >> d;
@@ -45,7 +45,7 @@ namespace flights {
                 }
             }
         } else if (ch == 3) {
-            if (access::AccessControl::anyOf(currentRole, {utils::Role::Admin})) {
+            if (access::AccessControl::anyOf(currentRole, {Role::Admin})) {
                 cout << "Passenger ID: "; string passId; cin >> passId;
                 string fid;
                 cout << "Flight ID to book: "; cin >> fid;
@@ -62,7 +62,7 @@ namespace flights {
         }
     }
 
-    void FlightsCLI::runSearchAndBook(const utils::ID &currentUserId, utils::Role currentRole) {
+    void FlightsCLI::runSearchAndBook(const string &currentUserId, Role currentRole) {
         (void)currentRole;
         manager.load();
         ticketManager.load();
