@@ -1,11 +1,27 @@
 #include "DataStorage.h"
 #include <fstream>
+#include <filesystem>
 
 using namespace std;
 
 namespace storage {
     string DataStorage::pathForDataFile(const string &filename) {
-        return "data/" + filename;
+        namespace fs = std::filesystem;
+
+        const vector<string> candidates = {
+            "storage/data/" + filename,
+            "../storage/data/" + filename,
+            "data/" + filename
+        };
+
+        for (const auto &path : candidates) {
+            if (fs::exists(path)) {
+                return path;
+            }
+        }
+
+        // Default to storage/data to ensure writes go to project data folder
+        return "storage/data/" + filename;
     }
 
     vector <string> DataStorage::readAll(const string &filename) {

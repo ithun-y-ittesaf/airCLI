@@ -16,15 +16,18 @@ namespace users {
         string username;
         string password;
         Role role;
+        long long cashBalance; // Cash at hand from bank withdrawals
+        string phoneNumber;
+        string linkedBankUserId;
 
     public:
 
-        User() : role(Role::Passenger) {}
+                User() : role(Role::Passenger), cashBalance(0) {}
 
-        User(const string &userId, const string &fullName, 
-             const string &userName, const string &pass, Role userRole)
-            : id(userId), name(fullName), username(userName), 
-              password(pass), role(userRole) {}
+                User(const string &userId, const string &fullName, 
+                         const string &userName, const string &pass, Role userRole)
+                        : id(userId), name(fullName), username(userName), 
+                            password(pass), role(userRole), cashBalance(0) {}
 
         // Getters
         const string &getId() const { return id; }
@@ -33,6 +36,17 @@ namespace users {
         const string &getPassword() const { return password; }
         
         Role getRole() const { return role; }
+
+        long long getCashBalance() const { return cashBalance; }
+        void setCashBalance(long long amount) { cashBalance = amount; }
+        void addCash(long long amount) { cashBalance += amount; }
+        void subtractCash(long long amount) { if (cashBalance >= amount) cashBalance -= amount; }
+
+        const string &getPhoneNumber() const { return phoneNumber; }
+        void setPhoneNumber(const string &phone) { phoneNumber = phone; }
+
+        const string &getLinkedBankUserId() const { return linkedBankUserId; }
+        void setLinkedBankUserId(const string &bankUserId) { linkedBankUserId = bankUserId; }
 
         // Update user role
         void setRole(Role newRole) { role = newRole; }

@@ -15,13 +15,15 @@ namespace users {
         void showWelcome();
         bool runSignup(string &outUserId);
         bool runLogin(string &outUserId);
-        void linkBankAccount(const string &userId);
         
     public:
         explicit UserCLI(UserManager &m) : manager(m) {}
         
         // Run the welcome flow (login or signup)
         bool welcomeFlow(string &outUserId, Role &outRole);
+
+        // Link bank account by phone
+        bool linkBankAccount(const string &userId);
     };
 }
 

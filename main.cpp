@@ -44,7 +44,7 @@ int main() {
         std::cout << "1. Search & Book Flights\n";
         std::cout << "2. My Tickets\n";
         std::cout << "3. Travel History\n";
-        std::cout << "4. Banking\n";
+        std::cout << "4. Link Bank\n";
         
         if (userRole == Role::Admin) {
             std::cout << "5. Admin: Manage Flights\n";
@@ -68,9 +68,13 @@ int main() {
         case 3:
             ticketsCLI.runTravelHistory(userId, userRole);
             break;
-        case 4:
-            bankingCLI.runBanking(userId, userRole);
+        case 4: {
+            bool openBanking = userCLI.linkBankAccount(userId);
+            if (openBanking) {
+                bankingCLI.runBanking(userId, userRole);
+            }
             break;
+        }
         case 5:
             if (userRole == Role::Admin) {
             flightsCLI.run(userId, userRole);

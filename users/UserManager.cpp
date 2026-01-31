@@ -25,7 +25,7 @@ namespace users {
         return storage::DataStorage::writeAll("users.txt", lines);
     }
 
-    string UserManager::createUser(const std::string &name, const std::string &username, const std::string &password) {
+    string UserManager::createUser(const std::string &name, const std::string &username, const std::string &password, const std::string &phoneNumber) {
         using namespace std::chrono;
         auto t = duration_cast<seconds>(system_clock::now().time_since_epoch()).count();
         string id = "U" + std::to_string(t);
@@ -33,6 +33,7 @@ namespace users {
             ++t; id = "U" + std::to_string(t);
         }
         User u(id, name, username, password, Role::Passenger);
+        u.setPhoneNumber(phoneNumber);
         usersById[id] = u;
         usernameToId[username] = id;
         storage::DataStorage::appendLine("users.txt", u.serialize());
@@ -49,6 +50,15 @@ namespace users {
         auto it = usernameToId.find(username);
         if (it == usernameToId.end()) return nullptr;
         return get(it->second);
+    }
+
+    const User* UserManager::findByPhoneNumber(const std::string &phoneNumber) const {
+        for (const auto &p : usersById) {
+            if (p.second.getPhoneNumber() == phoneNumber) {
+                return &p.second;
+            }
+        }
+        return nullptr;
     }
 
     bool UserManager::authenticate(const std::string &username, const std::string &password, string &outId) const {
@@ -70,6 +80,37 @@ namespace users {
         auto it = usersById.find(id);
         if (it == usersById.end()) return false;
         it->second.setRole(newRole);
+        return save();
+    }
+
+    bool UserManager::updateCashBalance(const string &id, long long amount) {
+        auto it = usersById.find(id);
+        if (it == usersById.end()) return false;
+        it->second.addCash(amount);
+        return save();
+    }
+
+    bool UserManager::updateCashBalanceByPhone(const string &phoneNumber, long long amount) {
+        for (auto &p : usersById) {
+            if (p.second.getPhoneNumber() == phoneNumber) {
+                p.second.addCash(amount);
+                return save();
+            }
+        }
+        return false;
+    }
+
+    bool UserManager::updatePhoneNumber(const string &id, const string &phoneNumber) {
+        auto it = usersById.find(id);
+        if (it == usersById.end()) return false;
+        it->second.setPhoneNumber(phoneNumber);
+        return save();
+    }
+
+    bool UserManager::updateLinkedBankUserId(const string &id, const string &bankUserId) {
+        auto it = usersById.find(id);
+        if (it == usersById.end()) return false;
+        it->second.setLinkedBankUserId(bankUserId);
         return save();
     }
 }

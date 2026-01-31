@@ -13,11 +13,12 @@ NC='\033[0m' # No Color
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BUILD_DIR="$PROJECT_DIR/build"
 OUTPUT_EXECUTABLE="$BUILD_DIR/aircli"
+BANKING_EXECUTABLE="$BUILD_DIR/bankcli"
 COMPILER="g++"
 CFLAGS="-std=c++17 -Wall -Wextra -g -O2"
 INCLUDE_DIRS="-I$PROJECT_DIR"
 
-# Source files (all .cpp files)
+# Source files for main airCLI (all .cpp files except bankingMain.cpp)
 SOURCE_FILES=(
     "$PROJECT_DIR/main.cpp"
     "$PROJECT_DIR/access/AccessControl.cpp"
@@ -33,6 +34,20 @@ SOURCE_FILES=(
     "$PROJECT_DIR/tickets/Ticket.cpp"
     "$PROJECT_DIR/tickets/TicketManager.cpp"
     "$PROJECT_DIR/tickets/TicketsCLI.cpp"
+    "$PROJECT_DIR/users/User.cpp"
+    "$PROJECT_DIR/users/UserCLI.cpp"
+    "$PROJECT_DIR/users/UserManager.cpp"
+)
+
+# Source files for banking CLI
+BANKING_SOURCE_FILES=(
+    "$PROJECT_DIR/bankingMain.cpp"
+    "$PROJECT_DIR/access/AccessControl.cpp"
+    "$PROJECT_DIR/banking/BankingAccount.cpp"
+    "$PROJECT_DIR/banking/BankingManager.cpp"
+    "$PROJECT_DIR/banking/Transaction.cpp"
+    "$PROJECT_DIR/logging/Logger.cpp"
+    "$PROJECT_DIR/storage/DataStorage.cpp"
     "$PROJECT_DIR/users/User.cpp"
     "$PROJECT_DIR/users/UserCLI.cpp"
     "$PROJECT_DIR/users/UserManager.cpp"
@@ -56,15 +71,28 @@ build() {
     echo -e "Include: $INCLUDE_DIRS"
     echo ""
     
-    # Compile and link
+    # Compile and link main airCLI
+    echo -e "${YELLOW}Building airCLI...${NC}"
     if $COMPILER $CFLAGS $INCLUDE_DIRS "${SOURCE_FILES[@]}" -o "$OUTPUT_EXECUTABLE"; then
-        echo -e "${GREEN}Build successful!${NC}"
+        echo -e "${GREEN}airCLI build successful!${NC}"
         echo -e "${GREEN}Executable: $OUTPUT_EXECUTABLE${NC}"
-        return 0
     else
-        echo -e "${RED}Build failed!${NC}"
+        echo -e "${RED}airCLI build failed!${NC}"
         return 1
     fi
+
+    # Compile and link banking CLI
+    echo -e "${YELLOW}Building Banking CLI...${NC}"
+    if $COMPILER $CFLAGS $INCLUDE_DIRS "${BANKING_SOURCE_FILES[@]}" -o "$BANKING_EXECUTABLE"; then
+        echo -e "${GREEN}Banking CLI build successful!${NC}"
+        echo -e "${GREEN}Executable: $BANKING_EXECUTABLE${NC}"
+    else
+        echo -e "${RED}Banking CLI build failed!${NC}"
+        return 1
+    fi
+
+    echo -e "${GREEN}All builds completed successfully!${NC}"
+    return 0
 }
 
 # Run function

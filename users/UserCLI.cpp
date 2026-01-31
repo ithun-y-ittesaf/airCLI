@@ -1,5 +1,7 @@
 #include "UserCLI.h"
 #include <iostream>
+#include <sstream>
+#include "../storage/DataStorage.h"
 
 using namespace std;
 
@@ -45,7 +47,11 @@ namespace users {
             return false;
         }
         
-        outUserId = manager.createUser(name, username, password);
+        cout << "Phone Number  : ";
+        string phoneNumber;
+        getline(cin, phoneNumber);
+
+        outUserId = manager.createUser(name, username, password, phoneNumber);
         
         cout << "\n✓ Account created successfully!\n";
         cout << "Your user ID: " << outUserId << "\n";
@@ -78,9 +84,78 @@ namespace users {
         return true;
     }
 
-    void UserCLI::linkBankAccount(const string &userId) {
-        // Future feature: link external bank account
-        (void)userId;
+    static string findBankUserIdByPhone(const string &phone) {
+        auto lines = storage::DataStorage::readAll("bank_users.txt");
+        for (const auto &line : lines) {
+            if (line.empty()) continue;
+            stringstream ss(line);
+            string id, name, phoneVal, pin;
+            getline(ss, id, '|');
+            getline(ss, name, '|');
+            getline(ss, phoneVal, '|');
+            getline(ss, pin, '|');
+            if (phoneVal == phone) {
+                return id;
+            }
+        }
+        return "";
+    }
+
+    bool UserCLI::linkBankAccount(const string &userId) {
+        manager.load();
+        const User* user = manager.get(userId);
+        if (!user) {
+            cout << "\nUser not found.\n";
+            return false;
+        }
+
+        if (!user->getLinkedBankUserId().empty()) {
+            cout << "\nBank account already added. Want to unlink? (y/n): ";
+            char choice = 'n';
+            cin >> choice;
+            if (choice == 'y' || choice == 'Y') {
+                manager.updateLinkedBankUserId(userId, "");
+                cout << "\nBank account unlinked.\n";
+                return false;
+            }
+
+            cout << "\nOpen Banking CLI? (y/n): ";
+            cin >> choice;
+            return (choice == 'y' || choice == 'Y');
+        }
+
+        cout << "\n--- Link Bank Account ---\n";
+        cout << "Enter phone number: ";
+        string phone;
+        cin.ignore();
+        getline(cin, phone);
+
+        if (!user->getPhoneNumber().empty() && user->getPhoneNumber() != phone) {
+            cout << "\nPhone number does not match your airCLI profile.\n";
+            cout << "Your profile phone: " << user->getPhoneNumber() << "\n";
+            return false;
+        }
+
+        if (user->getPhoneNumber().empty()) {
+            manager.updatePhoneNumber(userId, phone);
+        }
+
+        string bankUserId = findBankUserIdByPhone(phone);
+        if (bankUserId.empty()) {
+            cout << "\nNo bank account found for this phone.\n";
+            cout << "Please register in Banking CLI first.\n";
+            cout << "Open Banking CLI now? (y/n): ";
+            char openChoice = 'n';
+            cin >> openChoice;
+            return (openChoice == 'y' || openChoice == 'Y');
+        }
+
+        manager.updateLinkedBankUserId(userId, bankUserId);
+        cout << "\n✓ Bank account linked successfully.\n";
+        cout << "Open Banking CLI now? (y/n): ";
+        char openChoice = 'n';
+        cin >> openChoice;
+        return (openChoice == 'y' || openChoice == 'Y');
     }
 
     bool UserCLI::welcomeFlow(string &outUserId, Role &outRole) {
