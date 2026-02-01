@@ -1,9 +1,35 @@
 #include "UserCLI.h"
 #include <iostream>
 #include <sstream>
+#include <termios.h>
+#include <unistd.h>
 #include "../storage/DataStorage.h"
 
 using namespace std;
+
+// Reads a line with characters hidden (shows '*' instead). Uses termios to disable echo.
+static string readMaskedPassword() {
+    if (!isatty(STDIN_FILENO)) {
+        string s;
+        getline(cin, s);
+        return s;
+    }
+    termios oldAttr, newAttr;
+    tcgetattr(STDIN_FILENO, &oldAttr);
+    newAttr = oldAttr;
+    newAttr.c_lflag &= ~(ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &newAttr);
+    string password;
+    char c;
+    while (read(STDIN_FILENO, &c, 1) == 1 && c != '\n') {
+        password += c;
+        cout << '*';
+        cout.flush();
+    }
+    cout << '\n';
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldAttr);
+    return password;
+}
 
 namespace users {
     void UserCLI::showWelcome() {
@@ -35,12 +61,12 @@ namespace users {
         }
         
         cout << "Password      : ";
-        string password;
-        getline(cin, password);
+        cout.flush();
+        string password = readMaskedPassword();
         
         cout << "Confirm       : ";
-        string confirmPassword;
-        getline(cin, confirmPassword);
+        cout.flush();
+        string confirmPassword = readMaskedPassword();
         
         if (password != confirmPassword) {
             cout << "\nThe passwords don't match. Please try again.\n";
@@ -69,8 +95,8 @@ namespace users {
         getline(cin, username);
         
         cout << "Password : ";
-        string password;
-        getline(cin, password);
+        cout.flush();
+        string password = readMaskedPassword();
         
         if (!manager.authenticate(username, password, outUserId)) {
             cout << "\nIncorrect username or password. Please try again.\n";

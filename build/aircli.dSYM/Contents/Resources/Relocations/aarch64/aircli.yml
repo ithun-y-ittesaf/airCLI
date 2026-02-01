@@ -1,0 +1,5 @@
+---
+triple:          'arm64-apple-darwin'
+binary-path:     '/Users/nafiannazatmahid/Downloads/Final_Mid_Project/build/aircli'
+relocations:     []
+...
