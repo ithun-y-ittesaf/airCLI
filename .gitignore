@@ -1,0 +1,21 @@
+# Build outputs
+build/
+*.o
+*.obj
+*.exe
+*.out
+*.app
+
+# macOS debug symbols
+*.dSYM/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Compiled binaries (fallback)
+aircli
+bankcli
