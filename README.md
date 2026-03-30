@@ -52,3 +52,10 @@ code/
 | `items.xml` | Item database |
 | `budget.xml` | Airport budget balance |
 | `budget_log.xml` | Budget event log |
+
+
+## Team - 03 || SPL - I
+- 230042125 Ittesaf Yeasir Ithun
+- 230042152 Faiaj Jarif
+- 230042144 Nafian Mahid
+
