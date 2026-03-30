@@ -2,10 +2,11 @@
 #define ROLE_H
 
 enum class Role {
-        Passenger = 0,      // Regular passenger user
-        Security = 1,       // Security officer
-        SeniorSecurity = 2, // Senior security manager
-        Admin = 3           // System administrator
-    };
+    Passenger      = 0,
+    Security       = 1,
+    SeniorSecurity = 2,
+    Admin          = 3,
+    Banned         = 4
+};
 
-#endif
+#endif // ROLE_H

@@ -2,21 +2,14 @@
 #define RESULT_H
 
 #include <string>
-
 using namespace std;
 
 struct Result {
-        bool ok;            
-        string message; 
+    bool        ok;
+    string message;
 
-        static Result Ok(const string &msg = "") { 
-            return {true, msg}; 
-        }
+    static Result Ok(const string &msg = "") { return {true,  msg}; }
+    static Result Err(const string &msg)     { return {false, msg}; }
+};
 
-        // Factory method for error results
-        static Result Err(const string &msg) { 
-            return {false, msg}; 
-        }
-    };
-
-#endif
+#endif // RESULT_H
